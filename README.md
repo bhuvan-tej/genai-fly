@@ -40,3 +40,7 @@ jupyter notebook
 ```
 
 Open a notebook from the Jupyter interface and run its cells in order. On Windows, activate the environment with `.venv\Scripts\activate`.
+
+---
+
+If this helped you, drop a ⭐ — it keeps the motivation going.
