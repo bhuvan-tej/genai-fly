@@ -17,7 +17,8 @@
 ```
 genai-fly/
 ├── 01-python/
-│   └── 01_Variables_Types.ipynb   # Variables, types, f-strings, collections
+│   ├── 01_Variables_Types.ipynb    # Variables, types, f-strings, collections
+│   └── 02_Conditions_Loops.ipynb   # Conditions, loops, comprehensions
 ├── .gitignore
 └── README.md
 ```
@@ -27,6 +28,7 @@ genai-fly/
 | #  | Notebook                                                | Topics                                                                                                             |
 |----|---------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | 01 | [Variables & Types](01-python/01_Variables_Types.ipynb) | variables · int · float · str · bool · None · type hints · type conversion · f-strings · list · dict · set · tuple |
+| 02 | [Conditions & Loops](01-python/02_Conditions_Loops.ipynb) | if/elif/else · comparison, boolean & membership operators · for · range() · enumerate() · accumulation pattern · while · break/continue · list & dict comprehensions |
 
 ## ⚙️ Getting Started
 
