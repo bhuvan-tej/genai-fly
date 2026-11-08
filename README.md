@@ -17,8 +17,9 @@
 ```
 genai-fly/
 ├── 01-python/
-│   ├── 01_Variables_Types.ipynb    # Variables, types, f-strings, collections
-│   └── 02_Conditions_Loops.ipynb   # Conditions, loops, comprehensions
+│   ├── 01_Variables_Types.ipynb            # Variables, types, f-strings, collections
+│   ├── 02_Conditions_Loops.ipynb           # Conditions, loops, comprehensions
+│   └── 03_Functions_DataStructures.ipynb   # Functions, lists, dicts, sets, tuples, lambdas
 ├── .gitignore
 └── README.md
 ```
@@ -29,6 +30,7 @@ genai-fly/
 |----|---------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
 | 01 | [Variables & Types](01-python/01_Variables_Types.ipynb) | variables · int · float · str · bool · None · type hints · type conversion · f-strings · list · dict · set · tuple |
 | 02 | [Conditions & Loops](01-python/02_Conditions_Loops.ipynb) | if/elif/else · comparison, boolean & membership operators · for · range() · enumerate() · accumulation pattern · while · break/continue · list & dict comprehensions |
+| 03 | [Functions & Data Structures](01-python/03_Functions_DataStructures.ipynb) | functions · parameters & return values · default parameters · \*args · \*\*kwargs · list methods · dict methods & safe access · sets · tuples · zip() · functions as objects · lambda · sorted() · map() · filter() |
 
 ## ⚙️ Getting Started
 
