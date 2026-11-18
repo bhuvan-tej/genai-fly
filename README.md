@@ -2,7 +2,7 @@
 
 # 🚀 GenAI Fly
 
-**Hands-on Python notebooks for learning the building blocks of Generative AI development**
+**Hands-on notebooks covering Python, Pydantic, databases, and the building blocks of Generative AI development**
 
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)
