@@ -14,6 +14,80 @@ This guide builds one example from scratch: an application in `ap-south-1` with 
 
 **Rule of thumb:** know enough to **deploy a private GenAI app, give it a private path to Bedrock and S3, size it for peak load, and debug a timeout**.
 
+## The big picture: everything in one VPC
+
+This diagram shows every piece a GenAI engineer needs to know and how traffic moves between them. AZ B repeats AZ A's layout and is collapsed to keep the diagram readable.
+
+```mermaid
+flowchart TB
+    user(["Users on the internet"])
+    extapi(["Public API<br/>e.g. OpenAI, web tools"])
+
+    subgraph region["Region: ap-south-1"]
+        bedrock[["Amazon Bedrock"]]
+        s3[("Amazon S3")]
+        tgw{{"Transit Gateway<br/>owned by network team"}}
+        other["Other team VPCs<br/>e.g. it-prod 10.1.0.0/16"]
+
+        subgraph vpc["VPC hr-prod-vpc: 10.2.0.0/16"]
+            igw{{"Internet Gateway<br/>1 per VPC"}}
+            s3ep["S3 gateway endpoint<br/>route-table entry, free"]
+
+            subgraph aza["AZ A: ap-south-1a"]
+                subgraph puba["Public subnet 10.2.0.0/24<br/>route: 0.0.0.0/0 to IGW"]
+                    alb["Load balancer node<br/>alb-sg"]
+                    nat["NAT gateway<br/>+ Elastic IP"]
+                end
+                subgraph appa["Private app subnet 10.2.16.0/23<br/>route: 0.0.0.0/0 to NAT"]
+                    app["App / agent / Lambda<br/>app-sg, private IP only"]
+                    brep["Bedrock interface endpoint<br/>uses 1 IP from this subnet"]
+                end
+                subgraph dba["Isolated data subnet 10.2.64.0/24<br/>local route only"]
+                    db[("Database / vector store<br/>db-sg")]
+                end
+            end
+
+            azb["AZ B: ap-south-1b<br/>same 3 tiers: 10.2.1.0/24, 10.2.18.0/23, 10.2.65.0/24"]
+        end
+    end
+
+    user -->|"HTTPS 443, allowed by alb-sg"| igw
+    igw --> alb
+    alb -->|"8080, app-sg allows alb-sg"| app
+    app -->|"5432, db-sg allows app-sg"| db
+    app -->|"private DNS, 443"| brep
+    brep --> bedrock
+    app -->|"S3 prefix-list route"| s3ep
+    s3ep --> s3
+    app -->|"0.0.0.0/0, outbound only"| nat
+    nat --> igw
+    igw --> extapi
+    app -->|"10.0.0.0/8"| tgw
+    tgw --> other
+    aza -.->|"repeated for high availability"| azb
+```
+
+**How to read it:**
+
+| Path in the diagram | What it shows | Section |
+|---|---|---|
+| User → IGW → load balancer → app → DB | **Inbound** traffic; only the load balancer is public | 3, 4, 7 |
+| App → NAT → IGW → public API | **Outbound only**; the app has no public IP | 3, 4, 6 |
+| App → Bedrock endpoint → Bedrock | Private path to Bedrock with **no NAT**; the endpoint uses an IP in the app subnet | 6 |
+| App → S3 gateway endpoint → S3 | **Free** private path to S3 through the route table | 6 |
+| App → Transit Gateway → other VPCs | Calling another team's VPC; this only works because CIDRs **don't overlap** | 9 |
+| Port labels (443 / 8080 / 5432) | **Security group** chain; each layer accepts traffic only from the layer in front | 7 |
+| Subnet CIDRs (`/24`, `/23`) | Sized for **peak** IP demand; app subnets are the largest | 2, 5 |
+| AZ B | The same layout repeated for high availability | 1, 9 |
+
+Route tables used in the diagram:
+
+| Subnet tier | `10.2.0.0/16` | `0.0.0.0/0` | Other routes |
+|---|---|---|---|
+| Public | `local` | Internet Gateway | — |
+| Private app | `local` | NAT gateway in the same AZ | S3 prefix list → gateway endpoint; `10.0.0.0/8` → Transit Gateway |
+| Isolated data | `local` | — (none) | — |
+
 ## 1. What is a VPC?
 
 A **Virtual Private Cloud (VPC)** is a logically isolated network that you define inside AWS. You choose its IP address range, divide that range into subnets, and configure how traffic moves between resources and outside the network.
@@ -232,18 +306,6 @@ Tool: **VPC Reachability Analyzer** shows which step blocks the path.
 | Agent pods on EKS scale from 20 to 500 | Size app subnets for peak pods plus deployment overlap. `/20` is a safe default. |
 | NAT bill is high | Move S3 traffic to the free gateway endpoint and Bedrock traffic to an interface endpoint. Don't pull large models through NAT repeatedly. |
 | App needs a vector DB in a private data subnet | Put the DB in an isolated subnet with no NAT route. `db-sg` allows the DB port only from `app-sg`. |
-
-## 12. Self-check: are you done with this module?
-
-- [ ] Count IPs for a workload at peak and choose a subnet CIDR
-- [ ] Explain what makes a subnet public, using its route table
-- [ ] Explain the difference between an Internet Gateway and a NAT gateway (direction, public IP, cost)
-- [ ] Explain when to use a gateway endpoint and when to use an interface endpoint
-- [ ] Write a three-tier security group chain using security groups as sources
-- [ ] Work through the four timeout checks
-- [ ] Build a small lab VPC yourself (VPC, public and private subnets, IGW, NAT, S3 endpoint, security groups, two EC2 instances) and **clean it up the same day**
-
-When you can check every box, you know enough networking to deploy GenAI apps.
 
 ## Sources
 

@@ -6,6 +6,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-FF9900)
 ![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
 
 </div>
@@ -22,11 +23,13 @@ genai-fly/
 │   ├── 03_Functions_DataStructures.ipynb   # Functions, lists, dicts, sets, tuples, lambdas
 │   ├── 04_File_IO_JSON.ipynb               # File I/O, JSON, CSV, mini AI workflow
 │   ├── 05_OOP_Classes.ipynb                # Classes, objects, methods, properties
-│   ├── 06_OOP_Inheritance_ABC.ipynb         # Inheritance, ABCs, composition, class methods
-│   ├── 07_Pydantic_Database.ipynb           # Pydantic validation and database basics
-│   ├── 08_HTTP_Requests.ipynb               # HTTP requests and APIs
+│   ├── 06_OOP_Inheritance_ABC.ipynb        # Inheritance, ABCs, composition, class methods
+│   ├── 07_Pydantic_Database.ipynb          # Pydantic validation and database basics
+│   ├── 08_HTTP_Requests.ipynb              # HTTP requests and APIs
 │   └── employee.csv                        # Sample customer data read in notebook 04
-├── 02-aws/                                  # Coming soon
+├── 02-aws/
+│   └── 1_network/
+│       └── AWS_Networking_VPC.md           # VPCs, subnets, CIDR blocks, IP planning
 ├── .gitignore
 └── README.md
 ```
@@ -43,10 +46,6 @@ genai-fly/
 | 06 | [OOP Part 2: Inheritance and ABCs](01-python/06_OOP_Inheritance_ABC.ipynb) | inheritance · method overriding · abstract base classes (`ABC`, `@abstractmethod`) · public/protected/private naming · `@classmethod` · `@staticmethod` · composition · `isinstance()` |
 | 07 | [Pydantic and Databases](01-python/07_Pydantic_Database.ipynb) | Pydantic models · field constraints · optional fields · allowed values · validating dictionaries and JSON · serializing models · nested models · AI classification validation · database basics · PostgreSQL |
 | 08 | [HTTP Requests and APIs](01-python/08_HTTP_Requests.ipynb) | APIs · GET · query parameters · HTTP status codes · POST · PUT/PATCH · DELETE · headers and authentication · network and HTTP errors · validating API responses with Pydantic |
-
-## ☁️ Coming Soon
-
-- AWS
 
 ## ⚙️ Getting Started
 
