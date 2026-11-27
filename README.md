@@ -28,9 +28,11 @@ genai-fly/
 │   ├── 08_HTTP_Requests.ipynb              # HTTP requests and APIs
 │   └── employee.csv                        # Sample customer data read in notebook 04
 ├── 02-aws/
-│   └── 1_network/
-│       └── AWS_Networking_VPC.md           # VPCs, subnets, CIDR blocks, IP planning
-├── .gitignore
+│   ├── 1_network/
+│   │   └── AWS_Networking_VPC.md           # VPCs, subnets, CIDR blocks, IP planning
+│   └── 2_S3/
+│       ├── AWS_S3.md                       # S3 basics and day-to-day operations with Boto3
+│       └── S3_Day_to_Day_Operations.ipynb  # Hands-on: buckets, upload, list, download, presigned URLs
 └── README.md
 ```
 
